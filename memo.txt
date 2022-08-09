@@ -1,0 +1,31 @@
+・APItoken
+36e21cdc9aeafcb0866f85af630057ba0810c96a
+
+・py用APItokenGET？
+import requests
+username = 'rtera'
+token = '36e21cdc9aeafcb0866f85af630057ba0810c96a'
+
+response = requests.get(
+    'https://www.pythonanywhere.com/api/v0/user/{username}/cpu/'.format(
+        username=username
+    ),
+    headers={'Authorization': 'Token {token}'.format(token=token)}
+)
+if response.status_code == 200:
+    print('CPU quota info:')
+    print(response.content)
+else:
+    print('Got unexpected status code {}: {!r}'.format(response.status_code, response.content))
+                        
+
+
+
+・superuser
+ID:mysuser
+PASS:11031103tT@
+mailAddress:
+
+
+・仮想webサーバー実行
+python manage.py runserver

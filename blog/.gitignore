@@ -1,0 +1,9 @@
+*.pyc
+*~
+/.vscode
+__pycache__
+myvenv
+db.postgres
+db.djangodatabase
+/static
+.DS_Store
