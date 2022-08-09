@@ -27,5 +27,10 @@ PASS:11031103tT@
 mailAddress:
 
 
-・仮想webサーバー実行
+・仮想webサーバー実行(仮想環境をONにしてからでないと動かない）
 python manage.py runserver
+
+
+git remote add origin https://github.com/obeh29380/my-first-blog.git
+
+pa_autoconfigure_django.py --python=3.9.12 https://github.com/obeh29380/my-first-blog.git
