@@ -22,7 +22,7 @@
     <div class="container2">
         <form id="ajax_chatReg" action="{% url 'ajax_chatReg' %}" method="POST" >
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ chatform.as_p }}
         <button type="submit" class="save btn btn-default">Save</button>
     </form>
 
@@ -82,6 +82,7 @@
             });
         });
 
+        authorid = 1
         $('#ajax_chatReg').on('submit', function(e) {
             e.preventDefault();
 
@@ -89,16 +90,26 @@
                 'url': '{% url "ajax_chatReg" %}',
                 'type': 'POST',
                 'data': {
-                    'title': $('#title').val(),
-                    'text': $('#text').val(),
+                    'authorid': authorid,
+                    'title': $('#id_title').val(),
+                    'text': $('#id_text').val(),
                 },
                 'dataType': 'json'
             })
             .done(function(response){
-                $('.chatlog').prepend('<p>引き算結果：' + response.text + '</p>');
+                $('.chatlog').prepend('<p>チャット：' + response.text + '</p>');
             })
-            .fail(function(response){
-                $('.chatlog').prepend('<p>失敗</p>');
+            .fail(function(jqXHR, textStatus, errorThrown){
+                $('.chatlog').prepend('<p>登録失敗</p>');
+                $('.chatlog').prepend('<p>' + $('#id_title').val() + '</p>');
+                $('.chatlog').prepend('<p>' + $('#id_text').val() + '</p>');
+                $('.chatlog').prepend('<p>' + '{% url "ajax_chatReg" %}' + '</p>');
+                
+                console.log("ajax通信に失敗しました");
+                console.log("jqXHR          : " + jqXHR.status); // HTTPステータスが取得
+                console.log("textStatus     : " + textStatus);    // タイムアウト、パースエラー
+                console.log("errorThrown    : " + errorThrown.message); // 例外情報
+                console.log("URL            : " + '{% url "ajax_chatReg" %}');
             });
         });
     </script>

@@ -47,7 +47,7 @@ def post_edit(request, pk):
 def chat(request):
     
     form = ChatForm()
-    return render(request, 'blog/chat.html', {'form': form})
+    return render(request, 'blog/chat.html', {'chatform': form})
 
 # chat画面の非同期通信用
 def ajax_number(request):
@@ -63,14 +63,34 @@ def ajax_number(request):
 
 # chat画面の非同期通信用
 def ajax_chatReg(request):
-    title = request.POST.get('title')
-    text = request.POST.get('text')
     #リクエストがPOSTの場合
-    if request.method == 'POST':
-        sample = Chat(author=request.user,title=title, text=text,published_date = timezone.now())
-        sample.save()       
+    
+    authorid = int(request.POST.get('authorid'))
+    Ptitle = request.POST.get('title')
+    Ptext = request.POST.get('text')
+    
+    # sample = Chat(author = Pauthor,title = Ptitle,text = Ptext,published_date = timezone.now())
+    # author_idは、値を指定するなら、int型で、Djangoが自動で作成するユーザテーブル(user_auth)に存在するidでなければエラーになる。
+    # リクエストユーザーのインスタンスを渡してやれば、その中からIDを拾って登録してくれる。
+    obj = Chat(author=request.user,title=Ptitle,text=Ptext,published_date=timezone.now())
+    obj.save()       
+    
+    
+    
+    # if request.method == "POST":
+    #     form = ChatForm(request.POST)
+        
+    # else:
+    #     form = ChatForm()
+        
+    # if form.is_valid():
+    #     post = form.save(commit=False)   #authorを追加するため、コミットはしない
+    #     post.author = request.user
+    #     post.published_date = timezone.now()
+    #     post.save()
+        
         
     d = {
-        'text': text,
+        'text': Ptext,
     }
     return JsonResponse(d)
