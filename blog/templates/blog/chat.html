@@ -16,17 +16,23 @@
         <h2>数値の計算</h2>
         <div class="result">
         </div>
+
     </div>
         
-      
-        <form id="ajax_chatReg" action="{% url 'ajax_number' %}" method="POST" >
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="save btn btn-default">Save</button>
-        </form>
-        
+    <div class="container2">
+        <form id="ajax_chatReg" action="{% url 'ajax_chatReg' %}" method="POST" >
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+
+        <h2>チャットログ</h2>
+        <div class="chatlog"></div>
+    </div>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script
+    <script>
         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -57,6 +63,7 @@
                 }
             }
         });
+    
 
         $('#ajax-number').on('submit', function(e) {
             e.preventDefault();
@@ -65,13 +72,13 @@
                 'url': '{% url "ajax_number" %}',
                 'type': 'POST',
                 'data': {
-                    'number1': $('#title').val(),
-                    'number2': $('#text').val(),
+                    'number1': $('#number1').val(),
+                    'number2': $('#number2').val(),
                 },
                 'dataType': 'json'
             })
             .done(function(response){
-                $('.result').prepend('<p>引き算結果：' + response.text + '</p>');
+                $('.result').prepend('<p>引き算結果：' + response.plus + '</p>');
             });
         });
 
@@ -88,7 +95,10 @@
                 'dataType': 'json'
             })
             .done(function(response){
-                $('.result').prepend('<p>引き算結果：' + response.text + '</p>');
+                $('.chatlog').prepend('<p>引き算結果：' + response.text + '</p>');
+            })
+            .fail(function(response){
+                $('.chatlog').prepend('<p>失敗</p>');
             });
         });
     </script>
