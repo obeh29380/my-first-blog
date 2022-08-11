@@ -17,3 +17,9 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    
+class Chat(models.Model):
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    text = models.TextField()
+    title = models.TextField(blank=True, null=True)
+    published_date = models.DateTimeField(blank=True, null=True)
