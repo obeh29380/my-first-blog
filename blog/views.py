@@ -51,14 +51,8 @@ def chat(request):
 
 # chat画面の非同期通信用
 def ajax_number(request):
-    if request.POST.get('number1') is None:
-        number1 = 0
-    else:
-        number1 = int(request.POST.get('number1'))
-    if request.POST.get('number2') is None:
-        number2 = 0
-    else:
-        number2 = int(request.POST.get('number2'))
+    number1 = int(request.POST.get('number1'))
+    number2 = int(request.POST.get('number2'))
     plus = number1 + number2
     minus = number1 - number2
     d = {

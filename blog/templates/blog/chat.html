@@ -4,33 +4,29 @@
     <title>Ajax</title>
   </head>
   <body>
-      <div class="container">
-          <h2>数値の入力</h2>
-          <form id="ajax-number" action="{% url 'ajax_number' %}" method="POST">
-              {% csrf_token %}
-              <input type="number" id="number1" required>
-              <input type="number" id="number2" required>
-              <button type="submit" >計算</button>
-          </form>
+    <div class="container">
+        <h2>数値の入力</h2>
+        <form id="ajax-number" action="{% url 'ajax_number' %}" method="POST">
+            {% csrf_token %}
+            <input type="number" id="number1" required>
+            <input type="number" id="number2" required>
+            <button type="submit" >計算</button>
+        </form>
 
-          <h2>数値の計算</h2>
-          <div class="result">
-          </div>
-      </div>
+        <h2>数値の計算</h2>
+        <div class="result">
+        </div>
+    </div>
         
       
-        <form id="ajax_chatReg" method="POST" >
+        <form id="ajax_chatReg" action="{% url 'ajax_number' %}" method="POST" >
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="save btn btn-default">Save</button>
         </form>
-
-
-
-
+        
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script
-        {% comment %} ajaxやるときのおまじないstart {% endcomment %}
         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -61,29 +57,25 @@
                 }
             }
         });
-        {% comment %} ajaxやるときのおまじないend {% endcomment %}
 
-        {% comment %} submitタイプのボタンが押されたらファンクション {% endcomment %}
-        $('#ajax-number').on('submit', function(e) 
-            {% comment %} submitボタンのデフォルト処理（指定のURLへフォームの内容を送信、URL指定が無ければ処理している画面）が動くのを防止 {% endcomment %}
+        $('#ajax-number').on('submit', function(e) {
             e.preventDefault();
 
             $.ajax({
                 'url': '{% url "ajax_number" %}',
                 'type': 'POST',
                 'data': {
-                    'number1': $('#number1').val(),
-                    'number2': $('#number2').val(),
+                    'number1': $('#title').val(),
+                    'number2': $('#text').val(),
                 },
                 'dataType': 'json'
             })
             .done(function(response){
-                {% comment %} $('.result').prepend('<p>引き算結果：' + response.text + '</p>'); {% endcomment %}
+                $('.result').prepend('<p>引き算結果：' + response.text + '</p>');
             });
-        );
+        });
 
-        $('#ajax_chatReg').on('submit', function(e) 
-            {% comment %} submitボタンのデフォルト処理（指定のURLへフォームの内容を送信、URL指定が無ければ処理している画面）が動くのを防止 {% endcomment %}
+        $('#ajax_chatReg').on('submit', function(e) {
             e.preventDefault();
 
             $.ajax({
@@ -98,7 +90,7 @@
             .done(function(response){
                 $('.result').prepend('<p>引き算結果：' + response.text + '</p>');
             });
-        );
+        });
     </script>
     
   </body>

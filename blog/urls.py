@@ -12,8 +12,8 @@ urlpatterns = [
     path('post/<int:pk>/', views.post_detail, name='post_detail'),
     path('post/new/', views.post_new, name='post_new'),
     path('post/<int:pk>/edit/', views.post_edit, name='post_edit'),
-    path('ajax-number/', views.ajax_number, name='ajax_number'),
     path('chat/', views.chat, name='chat'),
+    path('ajax-number/', views.ajax_number, name='ajax_number'),
     path('ajax_chatReg/', views.ajax_chatReg, name='ajax_chatReg'),
     
     
