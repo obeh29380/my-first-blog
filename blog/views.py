@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404,redirect
 from .models import Post,Chat
 from .forms import PostForm,ChatForm
+from .listen import start_listen
 from django.http import JsonResponse,HttpResponse
 
 # Create your views here.
@@ -56,11 +57,11 @@ def chat(request):
     data = {'title':'hello',
             'text':text}
         
-    print(queryset[0].text)
     form = ChatForm(
         data
     )
     
+    # start_listen(1)
     
     return render(request, 'blog/chat.html', {'chatform': form})
 

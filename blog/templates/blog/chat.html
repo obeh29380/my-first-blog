@@ -2,6 +2,7 @@
 <html lang="ja">
   <head>
     <title>Ajax</title>
+
   </head>
   <body>
     <div class="container">
@@ -33,6 +34,13 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
+        
+        history.pushState(null, null, {% url 'ajax_number' %});
+        window.addEventListener('popstate', (e) => {
+            alert('ブラウザバックを使わないでください。');
+            istory.go(1);
+        });
+
         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -56,14 +64,6 @@
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
         }
 
-        $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            }
-        });
-    
 
         $('#ajax-number').on('submit', function(e) {
             e.preventDefault();
@@ -82,6 +82,7 @@
             });
         });
 
+        {% comment %} そのうちユーザIDを取得するように変更 {% endcomment %}
         authorid = 1
         $('#ajax_chatReg').on('submit', function(e) {
             e.preventDefault();
