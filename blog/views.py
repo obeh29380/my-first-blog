@@ -2,7 +2,7 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404,redirect
 from .models import Post,Chat
 from .forms import PostForm,ChatForm
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
 
 # Create your views here.
 def post_list(request):
@@ -45,8 +45,23 @@ def post_edit(request, pk):
 
 # chat画面を開く用
 def chat(request):
+    # 全件取得
+    queryset = Chat.objects.all()
     
-    form = ChatForm()
+    text=""
+    
+    for idata in queryset:
+        text += idata.text + "\n"
+    
+    data = {'title':'hello',
+            'text':text}
+        
+    print(queryset[0].text)
+    form = ChatForm(
+        data
+    )
+    
+    
     return render(request, 'blog/chat.html', {'chatform': form})
 
 # chat画面の非同期通信用
