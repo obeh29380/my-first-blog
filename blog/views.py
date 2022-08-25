@@ -4,6 +4,7 @@ from .models import Post,Chat
 from .forms import PostForm,ChatForm
 from .listen import start_listen
 from django.http import JsonResponse,HttpResponse
+import logging
 
 # Create your views here.
 def post_list(request):
@@ -78,9 +79,9 @@ def ajax_number(request):
     return JsonResponse(d)
 
 # chat画面の非同期通信用
+
 def ajax_chatReg(request):
     #リクエストがPOSTの場合
-    
     authorid = int(request.POST.get('authorid'))
     Ptitle = request.POST.get('title')
     Ptext = request.POST.get('text')
@@ -88,7 +89,7 @@ def ajax_chatReg(request):
     # sample = Chat(author = Pauthor,title = Ptitle,text = Ptext,published_date = timezone.now())
     # author_idは、値を指定するなら、int型で、Djangoが自動で作成するユーザテーブル(user_auth)に存在するidでなければエラーになる。
     # リクエストユーザーのインスタンスを渡してやれば、その中からIDを拾って登録してくれる。
-    obj = Chat(author=request.user,title=Ptitle,text=Ptext,published_date=timezone.now())
+    obj = Chat(author_id=1,title=Ptitle,text=Ptext,published_date=timezone.now())
     obj.save()       
     
     
