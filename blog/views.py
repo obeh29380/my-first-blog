@@ -2,9 +2,7 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404,redirect
 from .models import Post,Chat
 from .forms import PostForm,ChatForm
-from .listen import start_listen
-from django.http import JsonResponse,HttpResponse
-import logging
+from django.http import JsonResponse
 
 # Create your views here.
 def post_list(request):
@@ -52,11 +50,18 @@ def chat(request):
     
     text=""
     
-    for idata in queryset:
-        text += idata.text + "\n"
-    
-    data = {'title':'hello',
-            'text':text}
+    if queryset:
+        for idata in queryset:
+            roomid = idata.roomid
+            text += idata.text + "\n"
+        
+        data = {'roomid':roomid,
+                'text':text,
+                'chatline':"naiyou"}
+    else:
+        data = {'roomid':"",
+                'text':"",
+                'chatline':"naiyou"}
         
     form = ChatForm(
         data
@@ -66,34 +71,48 @@ def chat(request):
     
     return render(request, 'blog/chat.html', {'chatform': form})
 
-# chat画面の非同期通信用
-def ajax_number(request):
-    number1 = int(request.POST.get('number1'))
-    number2 = int(request.POST.get('number2'))
-    plus = number1 + number2
-    minus = number1 - number2
-    d = {
-        'plus': plus,
-        'minus': minus,
-    }
-    return JsonResponse(d)
+# # chat画面の非同期通信用
+# def ajax_number(request):
+#     number1 = int(request.POST.get('number1'))
+#     number2 = int(request.POST.get('number2'))
+#     plus = number1 + number2
+#     minus = number1 - number2
+#     d = {
+#         'plus': plus,
+#         'minus': minus,
+#     }
+#     return JsonResponse(d)
 
 # chat画面の非同期通信用
 
 def ajax_chatReg(request):
     #リクエストがPOSTの場合
     authorid = int(request.POST.get('authorid'))
-    Ptitle = request.POST.get('title')
-    Ptext = request.POST.get('text')
+    PRoomid = request.POST.get('roomid')
+    PText = request.POST.get('chatline')
     
     # sample = Chat(author = Pauthor,title = Ptitle,text = Ptext,published_date = timezone.now())
     # author_idは、値を指定するなら、int型で、Djangoが自動で作成するユーザテーブル(user_auth)に存在するidでなければエラーになる。
     # リクエストユーザーのインスタンスを渡してやれば、その中からIDを拾って登録してくれる。
-    obj = Chat(author_id=1,title=Ptitle,text=Ptext,published_date=timezone.now())
+    obj = Chat(author_id=authorid,roomid=PRoomid,text=PText,published_date=timezone.now())
     obj.save()       
     
     
+    queryset = Chat.objects.all()
     
+    text=""
+    
+    if queryset:
+        for idata in queryset:
+            roomid = idata.roomid
+            text += idata.text + "\n"
+        
+        data = {'roomid':roomid,
+                'text':text}
+    else:
+        data = {'roomid':"",
+                'text':""}
+        
     # if request.method == "POST":
     #     form = ChatForm(request.POST)
         
@@ -106,8 +125,4 @@ def ajax_chatReg(request):
     #     post.published_date = timezone.now()
     #     post.save()
         
-        
-    d = {
-        'text': Ptext,
-    }
-    return JsonResponse(d)
+    return JsonResponse(data)

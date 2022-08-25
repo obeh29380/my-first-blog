@@ -5,7 +5,7 @@
 
   </head>
   <body>
-    <div class="container">
+    {% comment %} <div class="container">
         <h2>数値の入力</h2>
         <form id="ajax-number" action="{% url 'ajax_number' %}" method="POST">
             {% csrf_token %}
@@ -18,16 +18,16 @@
         <div class="result">
         </div>
 
-    </div>
+    </div> {% endcomment %}
         
     <div class="container2">
         <form id="ajax_chatReg" action="{% url 'ajax_chatReg' %}" method="POST" >
             {% csrf_token %}
             {{ chatform.as_p }}
-            <button type="submit" class="save btn btn-default">Save</button>
+            <textarea id="chatline"  cols="60" ></textarea >
+            <button type="submit" class="save btn btn-default">送信</button>
         </form>
 
-        <h2>チャットログ</h2>
         <div class="chatlog"></div>
     </div>
 
@@ -66,7 +66,7 @@
             }
         });
 
-        $('#ajax-number').on('submit', function(e) {
+        {% comment %} $('#ajax-number').on('submit', function(e) {
             e.preventDefault();
 
             $.ajax({
@@ -81,29 +81,33 @@
             .done(function(response){
                 $('.result').prepend('<p>引き算結果：' + response.plus + '</p>');
             });
-        });
+        }); {% endcomment %}
 
         {% comment %} そのうちユーザIDを取得するように変更 {% endcomment %}
         authorid = 1
         $('#ajax_chatReg').on('submit', function(e) {
             e.preventDefault();
 
+            chatline = document.getElementById('chatline');
+
             $.ajax({
                 'url': '{% url "ajax_chatReg" %}',
                 'type': 'POST',
                 'data': {
                     'authorid': authorid,
-                    'title': $('#id_title').val(),
+                    'roomid': $('#id_roomid').val(),
+                    'chatline':chatline.value,
                     'text': $('#id_text').val(),
                 },
                 'dataType': 'json'
             })
             .done(function(response){
-                $('.chatlog').prepend('<p>チャット：' + response.text + '</p>');
+                $('#id_text').val(response.text);
+                chatline.value = "";
             })
             .fail(function(jqXHR, textStatus, errorThrown){
                 $('.chatlog').prepend('<p>登録失敗</p>');
-                $('.chatlog').prepend('<p>' + $('#id_title').val() + '</p>');
+                $('.chatlog').prepend('<p>' + $('#id_roomid').val() + '</p>');
                 $('.chatlog').prepend('<p>' + $('#id_text').val() + '</p>');
                 $('.chatlog').prepend('<p>' + '{% url "ajax_chatReg" %}' + '</p>');
                 

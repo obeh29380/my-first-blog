@@ -21,5 +21,5 @@ class Post(models.Model):
 class Chat(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.TextField()
-    title = models.TextField(blank=True, null=True)
-    published_date = models.DateTimeField(blank=True, null=True)
+    roomid = models.CharField(blank=False, null=False,max_length=6,default="ZZZZZZ")
+    published_date = models.DateTimeField(default=timezone.now)
